@@ -165,8 +165,8 @@
     "circuitBreaker": true
   },
   "Arafat": {
-    "api": "https://arafatas.vercel.app",
+    "api": "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",
     "version": "1.0.4",
-    "author": "ARAFAT"
+    "author": "RayHan"
   }
 }
