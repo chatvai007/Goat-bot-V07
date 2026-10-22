@@ -2,7 +2,7 @@ module.exports = {
   config: {
     name: "owner",
     aliases: ["ownerinfo", "creator"],
-    version: "1.0.0",
+    version: "1.1.0",
     author: "Rayhan",
     countDown: 5,
     role: 0,
@@ -21,7 +21,7 @@ module.exports = {
   onStart: async function ({ message }) {
     const ownerInfo = `
 ╭━━━━━━━━━━━━━━━━━━╮
-┃ 👑  OWNER INFORMATION
+┃ 👑 OWNER INFORMATION
 ╰━━━━━━━━━━━━━━━━━━╯
 
 👤 Owner Name : Rayhan
@@ -29,6 +29,13 @@ module.exports = {
 ⚙️ Prefix     : !
 💻 Platform   : Messenger
 📱 Support    : Mobile
+
+━━━━━━━━━━━━━━━━━━━━
+
+💚⃟ 𝑾𝒉𝒂𝒕𝒔𝑨𝒑𝒑 ꧁༺ 01638759227 ༻꧂ 💚
+
+🔗 Facebook Profile:
+https://www.facebook.com/share/18wVDVhEmt/
 
 ━━━━━━━━━━━━━━━━━━━━
 💖 Thanks for using our bot!
