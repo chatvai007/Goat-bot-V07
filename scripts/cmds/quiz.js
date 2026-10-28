@@ -1,86 +1,91 @@
-const axios = require("axios");
-
-const mahmud = async () => {
-  const base = await axios.get("https://raw.githubusercontent.com/mahmudx7/exe/main/baseApiUrl.json");
-  return base.data.mahmud;
-};
 
 module.exports = {
   config: {
     name: "quiz",
-    aliases: ["qz"],
-    version: "1.7",
-    author: "MahMUD",
-    countDown: 10,
+    aliases: ["qz", "mcq"],
+    version: "1.0",
+    author: "Rayhan",
+    countDown: 5,
     role: 0,
     category: "game",
-    guide: {
-      en: "{pn}"
-    }
+    shortDescription: "Play a quiz game",
+    guide: "{pn}"
   },
 
-  onStart: async function ({ api, event, usersData, args }) {
-    const obfuscatedAuthor = String.fromCharCode(77, 97, 104, 77, 85, 68); 
-     if (module.exports.config.author !== obfuscatedAuthor) {
-      return api.sendMessage("You are not authorized to change the author name.\n", event.threadID, event.messageID);
-     }
-    
-    try {
-      const input = args.join("").toLowerCase() || "bn";
-      const category = input === "en" || input === "english" ? "english" : "bangla";
-
-      const apiUrl = await mahmud();
-      const res = await axios.get(`${apiUrl}/api/quiz?category=${category}`);
-      const quiz = res.data;
-
-      if (!quiz) {
-        return api.sendMessage("❌ No quiz available for this category.", event.threadID, event.messageID);
+  onStart: async function ({ message }) {
+    const questions = [
+      {
+        q: "বাংলাদেশের রাজধানী কোনটি?",
+        options: ["ঢাকা", "চট্টগ্রাম", "খুলনা", "রাজশাহী"],
+        answer: 0
+      },
+      {
+        q: "বাংলাদেশের জাতীয় ফুল কোনটি?",
+        options: ["গোলাপ", "শাপলা", "জবা", "বেলি"],
+        answer: 1
+      },
+      {
+        q: "সূর্য কোন দিকে ওঠে?",
+        options: ["পশ্চিম", "উত্তর", "পূর্ব", "দক্ষিণ"],
+        answer: 2
+      },
+      {
+        q: "এক সপ্তাহে কত দিন?",
+        options: ["৫ দিন", "৬ দিন", "৭ দিন", "৮ দিন"],
+        answer: 2
+      },
+      {
+        q: "বাংলাদেশের জাতীয় ফল কোনটি?",
+        options: ["আম", "কাঁঠাল", "লিচু", "কলা"],
+        answer: 1
+      },
+      {
+        q: "পৃথিবীর উপগ্রহ কোনটি?",
+        options: ["সূর্য", "মঙ্গল", "চাঁদ", "শুক্র"],
+        answer: 2
+      },
+      {
+        q: "ইংরেজি বর্ণমালায় মোট কয়টি অক্ষর?",
+        options: ["২৪টি", "২৫টি", "২৬টি", "২৭টি"],
+        answer: 2
+      },
+      {
+        q: "পানির রাসায়নিক সংকেত কী?",
+        options: ["CO2", "H2O", "O2", "NaCl"],
+        answer: 1
+      },
+      {
+        q: "বাংলাদেশের জাতীয় পশু কোনটি?",
+        options: ["সিংহ", "হরিণ", "রয়েল বেঙ্গল টাইগার", "হাতি"],
+        answer: 2
+      },
+      {
+        q: "২ + ৮ × ২ = কত?",
+        options: ["২০", "১৮", "১৬", "১২"],
+        answer: 1
       }
+    ];
 
-      const { question, correctAnswer, options } = quiz;
-      const { a, b, c, d } = options;
-      const quizMsg = {
-        body: `\n╭──✦ ${question}\n├‣ 𝗔) ${a}\n├‣ 𝗕) ${b}\n├‣ 𝗖) ${c}\n├‣ 𝗗) ${d}\n╰──────────────────‣\n𝐑𝐞𝐩𝐥𝐲 𝐰𝐢𝐭𝐡 𝐲𝐨𝐮𝐫 𝐚𝐧𝐬𝐰𝐞𝐫.`,
-      };
+    const quiz =
+      questions[Math.floor(Math.random() * questions.length)];
 
-      api.sendMessage(quizMsg, event.threadID, (error, info) => {
-        global.GoatBot.onReply.set(info.messageID, {
-          type: "reply",
-          commandName: this.config.name,
-          author: event.senderID,
-          messageID: info.messageID,
-          correctAnswer
-        });
+    const letters = ["A", "B", "C", "D"];
 
-        setTimeout(() => {
-          api.unsendMessage(info.messageID);
-        }, 40000);
-      }, event.messageID);
-    } catch (error) {
-      console.error(error);
-      api.sendMessage("🥹error, contact MahMUD.", event.threadID, event.messageID);
-    }
-  },
+    const text =
+      "🎯 QUIZ TIME 🎯\n\n" +
+      "❓ " + quiz.q + "\n\n" +
+      quiz.options
+        .map((option, i) => letters[i] + ". " + option)
+        .join("\n") +
+      "\n\n💬 উত্তর দিতে লিখো:\n" +
+      "!ans A / !ans B / !ans C / !ans D";
 
-  onReply: async function ({ event, api, Reply, usersData }) {
-    const { correctAnswer, author } = Reply;
-    if (event.senderID !== author) return api.sendMessage("𝐓𝐡𝐢𝐬 𝐢𝐬 𝐧𝐨𝐭 𝐲𝐨𝐮𝐫 𝐪𝐮𝐢𝐳 𝐛𝐚𝐛𝐲 >🐸", event.threadID, event.messageID);
+    global.GoatBotQuiz = global.GoatBotQuiz || {};
+    global.GoatBotQuiz[message.threadID] = {
+      answer: letters[quiz.answer],
+      question: quiz.q
+    };
 
-    await api.unsendMessage(Reply.messageID);
-    const userReply = event.body.trim().toLowerCase();
-
-    if (userReply === correctAnswer.toLowerCase()) {
-      const rewardCoins = 500;
-      const rewardExp = 121;
-      const userData = await usersData.get(author);
-      await usersData.set(author, {
-        money: userData.money + rewardCoins,
-        exp: userData.exp + rewardExp,
-        data: userData.data
-      });
-      api.sendMessage(`✅ | Correct answer baby\nYou earned ${rewardCoins} coins & ${rewardExp} exp.`, event.threadID, event.messageID);
-    } else {
-      api.sendMessage(`❌ | Wrong answer baby\nThe correct answer was: ${correctAnswer}`, event.threadID, event.messageID);
-    }
+    return message.reply(text);
   }
 };
