@@ -1,10 +1,10 @@
 
 module.exports.config = {
     name: "murgi",
-    version: "2.0",
+    version: "3.0",
     role: 0,
     author: "Rayhan",
-    description: "বন্ধুকে মজার মুরগি বলা",
+    description: "Funny Murgi Command",
     category: "fun",
     guide: "{pn} @mention",
     coolDown: 10
@@ -13,15 +13,17 @@ module.exports.config = {
 module.exports.onStart = async function ({ api, event }) {
     const mentions = event.mentions || [];
 
-    if (mentions.length === 0) {
+    if (!mentions.length || !mentions[0]?.id) {
         return api.sendMessage(
-            "🐔 কাকে মুরগি বলব? আগে কাউকে @mention করো!",
+            "🐔 কাকে মুরগি বানাবো? আগে কাউকে @mention করো!",
             event.threadID,
             event.messageID
         );
     }
 
     const target = mentions[0];
+    const name = target.name || "বন্ধু";
+    const uid = target.id;
 
     const messages = [
         "🐔 কুট কুট! মুরগি সাহেব হাজির! 😂",
@@ -32,7 +34,7 @@ module.exports.onStart = async function ({ api, event }) {
         "🐣 তুই তো মুরগির CEO!",
         "🤣 আজকে তোর মুরগি দিবস!",
         "🐔 তোর জন্য একটা মুরগির খাঁচা লাগবে!",
-        "🥚 ডিম পাড়ার সময় হয়ে গেছে নাকি?",
+        "🥚 ডিমের হিসাব পরে দিস!",
         "😂 মুরগির জগতে তুই সেলিব্রিটি!",
         "🐓 কক কক! মুরগি সাহেবের আগমন!",
         "🤣 তোরে দেখলে মুরগিরাও হাসে!",
@@ -42,23 +44,8 @@ module.exports.onStart = async function ({ api, event }) {
         "🤣 তোর ডাক শুনে মোরগও পালায়!",
         "🐔 তুই মুরগি নাকি মুরগির মামা?",
         "😂 খাঁচার VIP সদস্য হাজির!",
-        "🥚 ডিমের বাজারে তোর অনেক নাম!",
         "🐓 মুরগি সাহেব, সালাম নিন!",
-        "🤣 তোর নাম শুনে মুরগিরা মিটিং ডাকে!",
-        "🐔 কুট কুট মন্ত্রণালয়ের মন্ত্রী!",
-        "😂 তুই মুরগি জগতের কিং!",
-        "🐣 মুরগির খাঁচায় তোর জন্য সিংহাসন আছে!",
-        "🤣 তোরে নিয়ে মুরগিরা গবেষণা করে!",
-        "🐔 মুরগি বাহিনীর আজীবন সভাপতি!",
-        "😂 তোর ডাক শুনে ঘুমন্ত মোরগও জেগে যায়!",
-        "🥚 ডিমের হিসাব পরে দিস!",
-        "🐓 মুরগি সাহেবের স্টাইলই আলাদা!",
-        "🤣 কুট কুট করে পুরো গ্রুপ মাতিয়ে দিলি!",
-        "🐔 তুই মুরগি জগতের VIP!",
-        "😂 মুরগিরাও তোকে বস বলে ডাকে!",
-        "🐣 খাঁচার দরজা খুললেই তোর এন্ট্রি!",
-        "🤣 মুরগি রাজ্যের ভবিষ্যৎ সম্রাট!",
-        "🐔 কুট কুট! আজকের শো শেষ!"
+        "🤣 মুরগি রাজ্যের ভবিষ্যৎ সম্রাট!"
     ];
 
     for (const msg of messages) {
@@ -66,11 +53,10 @@ module.exports.onStart = async function ({ api, event }) {
 
         await new Promise(resolve => {
             api.sendMessage(
-                `${target.name}, ${msg}`,
+                `${name}, ${msg}`,
                 event.threadID,
                 () => resolve()
             );
         });
     }
 };
-                
