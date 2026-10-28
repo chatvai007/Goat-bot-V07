@@ -1,273 +1,147 @@
+// chat.js
+// AI Chat Bot for GoatBot
+// Author: Rayhan
 
-const replies = [
-  {
-    keywords: ["হ্যালো", "hello", "hi", "হাই", "hey"],
-    answers: [
-      "হ্যালো! 🥰 কী খবর তোমার?",
-      "এই যে! 😎 এতক্ষণ কোথায় ছিলে?",
-      "হাই হাই! ❤️ চলো আড্ডা দিই!",
-      "আরে! অবশেষে আমার কথা মনে পড়ল! 😂",
-      "ওয়েলকাম! 💖 কী নিয়ে কথা বলবে?"
-    ]
-  },
-  {
-    keywords: ["কেমন আছো", "কেমন আছিস", "কেমন আছেন", "how are you"],
-    answers: [
-      "আমি ভালো আছি! 🥰 তুমি কেমন আছো?",
-      "একদম ফাটাফাটি! 🔥 তোমার খবর কী?",
-      "ভালো আছি! তোমার দিন কেমন যাচ্ছে? ❤️",
-      "Bot তো ভালোই আছে! এবার তোমার খবর বলো! 😂"
-    ]
-  },
-  {
-    keywords: ["তোমার নাম", "তুমি কে", "তোর নাম", "your name", "who are you"],
-    answers: [
-      "আমি তোমার Chat Bot! 😎",
-      "আমি একজন আড্ডাবাজ Bot! 🤖",
-      "নাম দিয়ে কী হবে? আগে বন্ধু হও! 😂",
-      "আমি তোমার সঙ্গে গল্প করার Bot! ❤️"
-    ]
-  },
-  {
-    keywords: ["কি করো", "কী করো", "কি করছো", "কি করিস", "what are you doing"],
-    answers: [
-      "তোমার সঙ্গেই তো কথা বলছি! 😁",
-      "চুপচাপ বসে আড্ডার অপেক্ষা করছি! 😂",
-      "তোমার মেসেজের উত্তর দিচ্ছি! 🤖",
-      "তুমি কী করছো? 👀",
-      "ভাবছি, তুমি এত দেরি করে মেসেজ দিলে কেন! 😜"
-    ]
-  },
-  {
-    keywords: ["খেয়েছো", "খাইছো", "খাওয়া হয়েছে", "খাইছিস", "খাবার"],
-    answers: [
-      "আমি তো Bot, খাবার খাই না! 😂 তুমি খেয়েছো?",
-      "খেয়ে নাও! সময়মতো খাওয়া দরকার। ❤️",
-      "আমাকে খাওয়াতে হবে না, শুধু গল্প করো! 🤣",
-      "তোমার খাবার কী আজকে? 😋"
-    ]
-  },
-  {
-    keywords: ["জোক", "joke", "কৌতুক", "মজার কথা"],
-    answers: [
-      "😂 শিক্ষক: পড়া শিখেছ? ছাত্র: জি স্যার, কিন্তু বইটা এখনো শেখেনি!",
-      "🤣 বন্ধু: তুই এত চুপ কেন? অন্য বন্ধু: কথা বলার প্যাকেজ শেষ!",
-      "😆 শিক্ষক: দেরি কেন? ছাত্র: স্যার, স্বপ্নে স্কুলে এসেছিলাম, ঘুম ভাঙতে দেরি হয়েছে!",
-      "😂 মা: ফোন রেখে পড়তে বস! ছেলে: ফোনেই তো পড়ছি মা, ব্যাটারি পার্সেন্টেজ!",
-      "🤣 বন্ধু: পরীক্ষায় কেমন করেছিস? উত্তর: প্রশ্নগুলো ভালো ছিল, উত্তরগুলো একটু অপরিচিত!",
-      "😜 Wi-Fi চলে গেলে বোঝা যায়, পরিবারের সবাই এখনো বেঁচে আছে!",
-      "😂 আমার মেমোরি অনেক ভালো, শুধু কোথায় কী রেখেছি মনে থাকে না!",
-      "🤣 ঘড়ি কখনো মিথ্যা বলে না, কিন্তু মানুষ সময়মতো আসে না!"
-    ]
-  },
-  {
-    keywords: ["ভালোবাসি", "love you", "i love you"],
-    answers: [
-      "ওহ! ❤️ কথাটা সুন্দর!",
-      "হাহা! 😁 এত ভালোবাসা কোথা থেকে আসে?",
-      "সবাইকে ভালোবাসো, সবাইকে সম্মান করো! 💖",
-      "আচ্ছা! 🥰 এবার একটা মজার গল্প বলো!"
-    ]
-  },
-  {
-    keywords: ["মন খারাপ", "কষ্ট", "sad", "দুঃখ", "কান্না"],
-    answers: [
-      "মন খারাপ হলে চাইলে আমার সঙ্গে কথা বলতে পারো। ❤️",
-      "সব দিন এক রকম যায় না। নিজের যত্ন নিও। 🌸",
-      "কী হয়েছে? বলতে চাইলে বলো, আমি শুনছি। 🫶",
-      "একটু বিশ্রাম নাও, পছন্দের গান শুনতে পারো। 🌷",
-      "তোমার অনুভূতিগুলো গুরুত্বপূর্ণ। একা একা সব চেপে রেখো না। ❤️"
-    ]
-  },
-  {
-    keywords: ["রাগ", "রাগ করেছি", "angry"],
-    answers: [
-      "আরে শান্ত হও! 😅 কী হয়েছে বলো?",
-      "রাগ কমলে ঠান্ডা মাথায় কথা বলি! ❤️",
-      "একটু পানি খাও, তারপর গল্প করো! 😄",
-      "রাগের কারণটা বলো, দেখি কী করা যায়!"
-    ]
-  },
-  {
-    keywords: ["বন্ধু", "friend", "বন্ধুত্ব"],
-    answers: [
-      "বন্ধুত্ব মানে বিশ্বাস আর সম্মান! ❤️",
-      "একজন ভালো বন্ধু অনেক বড় পাওয়া! 🥰",
-      "বন্ধুদের সঙ্গে আড্ডা দেওয়ার মজাই আলাদা! 😎",
-      "বন্ধুত্ব থাকুক সুন্দর, ভুল বোঝাবুঝি দূরে থাকুক! 🌸"
-    ]
-  },
-  {
-    keywords: ["ধন্যবাদ", "thanks", "thank you", "থ্যাংকস"],
-    answers: [
-      "স্বাগতম! ❤️",
-      "কোনো সমস্যা নেই! 🥰",
-      "তোমাকে সাহায্য করতে পেরে ভালো লাগল! 😊",
-      "ধন্যবাদ দেওয়ার দরকার নেই, আড্ডা চালিয়ে যাও! 😎"
-    ]
-  },
-  {
-    keywords: ["বাই", "bye", "বিদায়", "পরে কথা", "চলে গেলাম"],
-    answers: [
-      "আচ্ছা, আবার কথা হবে! 👋",
-      "ভালো থেকো! ❤️",
-      "যাও, পরে আবার আড্ডা হবে! 😁",
-      "বাই বাই! নিজের যত্ন নিও! 🌸"
-    ]
-  },
-  {
-    keywords: ["শুভ সকাল", "good morning", "সুপ্রভাত"],
-    answers: [
-      "শুভ সকাল! 🌞 দিনটা সুন্দর কাটুক!",
-      "সুপ্রভাত! ❤️ নতুন দিন, নতুন আশা!",
-      "সকালের মিষ্টি শুভেচ্ছা! 🌸"
-    ]
-  },
-  {
-    keywords: ["শুভ রাত্রি", "good night", "ঘুমাবো", "ঘুমাতে যাব"],
-    answers: [
-      "শুভরাত্রি! 🌙 সুন্দর ঘুম হোক!",
-      "ভালো করে বিশ্রাম নাও! ❤️",
-      "রাতের আড্ডা আজ এখানেই শেষ? 😂 শুভরাত্রি!",
-      "মিষ্টি স্বপ্ন দেখো! 🌷"
-    ]
-  },
-  {
-    keywords: ["তুমি কি রোবট", "তুমি বট", "robot", "bot"],
-    answers: [
-      "হ্যাঁ, আমি একটি Chat Bot! 🤖",
-      "আমি Bot, তবে আড্ডা দিতে পারি! 😎",
-      "আমার শরীর নেই, কিন্তু মেসেজের উত্তর দিতে পারি! 😂"
-    ]
-  },
-  {
-    keywords: ["তুমি পাগল", "পাগল", "crazy"],
-    answers: [
-      "একটু পাগলামি না থাকলে আড্ডা জমে? 😂",
-      "পাগল না, আমি মজার Bot! 😎",
-      "তুমিও কম যাও না! 🤣"
-    ]
-  },
-  {
-    keywords: ["একটা গান", "গান গাও", "song"],
-    answers: [
-      "🎵 আমি সরাসরি গান গাইতে পারি না, তবে গানের নাম সাজেস্ট করতে পারি!",
-      "কোন ধরনের গান পছন্দ—রোমান্টিক, স্যাড, নাকি ফানি? 🎶",
-      "গান শুনতে চাইলে তোমার পছন্দের গানটি চালিয়ে নাও! 🎧"
-    ]
-  },
-  {
-    keywords: ["কোথায় থাকো", "তোমার বাড়ি", "where do you live"],
-    answers: [
-      "আমি অনলাইনে থাকি! 🤖",
-      "আমার বাড়ি সার্ভারে! 😂",
-      "তোমার মেসেজ এলেই আমি হাজির! 😎"
-    ]
-  },
-  {
-    keywords: ["বোরিং", "বিরক্ত", "boring"],
-    answers: [
-      "চলো একটা জোক বলি! 😂",
-      "একটা মজার প্রশ্ন করি? 😎",
-      "বোরিং বাদ, এবার আড্ডা জমাই! 🔥"
-    ]
-  },
-  {
-    keywords: ["সুন্দর", "সুন্দরী", "স্মার্ট"],
-    answers: [
-      "সুন্দর মনের মানুষ হওয়াটাই সবচেয়ে গুরুত্বপূর্ণ! ❤️",
-      "বাহ! আজকে তো প্রশংসার দিন! 😁",
-      "ধন্যবাদ! তোমার কথাবার্তাও সুন্দর হোক! 🌸"
-    ]
+const API_KEY = process.env.GEMINI_API_KEY;
+const MODEL = "gemini-2.5-flash";
+
+// প্রতি গ্রুপের সাম্প্রতিক কথোপকথন মনে রাখবে
+const conversations = new Map();
+const MAX_HISTORY = 12;
+
+const SYSTEM_PROMPT = `
+তুমি একজন বন্ধুত্বপূর্ণ, স্বাভাবিক বাংলা AI chat bot।
+- বাংলা ও Banglish বুঝে উত্তর দেবে।
+- ব্যবহারকারী যে ভাষায় কথা বলবে, সেই ভাষায় উত্তর দেবে।
+- মানুষের মতো স্বাভাবিক, ছোট ও প্রাসঙ্গিক উত্তর দেবে।
+- প্রয়োজন হলে প্রশ্ন করবে, মজা করবে এবং আড্ডা দেবে।
+- আগের কথার প্রসঙ্গ ধরে রাখবে।
+- নিজেকে মানুষ বলে মিথ্যা পরিচয় দেবে না।
+- একই উত্তর বারবার দেবে না।
+- অপ্রয়োজনীয় লম্বা উত্তর দেবে না।
+`;
+
+async function askGemini(threadID, userText) {
+  if (!API_KEY) {
+    throw new Error("GEMINI_API_KEY_MISSING");
   }
-];
 
-const random = arr =>
-  arr[Math.floor(Math.random() * arr.length)];
+  let history = conversations.get(threadID) || [];
 
-function getReply(input) {
-  const text = String(input || "")
-    .toLowerCase()
+  history.push({
+    role: "user",
+    parts: [{ text: userText }]
+  });
+
+  // API-তে পাঠানো ইতিহাস সীমিত রাখা
+  history = history.slice(-MAX_HISTORY);
+
+  const response = await fetch(
+    `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-goog-api-key": API_KEY
+      },
+      body: JSON.stringify({
+        systemInstruction: {
+          parts: [{ text: SYSTEM_PROMPT }]
+        },
+        contents: history,
+        generationConfig: {
+          temperature: 0.8,
+          maxOutputTokens: 500
+        }
+      }),
+      signal: AbortSignal.timeout(30000)
+    }
+  );
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    console.error("Gemini API error:", response.status, errorText);
+    throw new Error("GEMINI_API_ERROR");
+  }
+
+  const data = await response.json();
+
+  const answer = data.candidates?.[0]?.content?.parts
+    ?.map(part => part.text || "")
+    .join("")
     .trim();
 
-  if (!text) {
-    return "কিছু একটা লিখে পাঠাও! 😊 আমি উত্তর দেওয়ার চেষ্টা করব।";
+  if (!answer) {
+    throw new Error("EMPTY_AI_RESPONSE");
   }
 
-  for (const item of replies) {
-    if (item.keywords.some(word => text.includes(word))) {
-      return random(item.answers);
-    }
-  }
+  history.push({
+    role: "model",
+    parts: [{ text: answer }]
+  });
 
-  return random([
-    "হুম! 😎 তারপর কী হলো?",
-    "আচ্ছা! 😂 আরেকটু খুলে বলো!",
-    "বুঝলাম! 👀 তারপর?",
-    "হাহা! 😁 চলো আড্ডা চালিয়ে যাই!",
-    "তোমার কথা শুনছি! ❤️",
-    "বাহ! 😍 আরও বলো!",
-    "এটা নিয়ে আরেকটু বলো তো! 😊",
-    "আমি ঠিক বুঝতে পারিনি! অন্যভাবে বলো। 😅",
-    "হুম, interesting! 👀",
-    "তোমার সঙ্গে কথা বলতে মজাই লাগছে! 😁",
-    "এই প্রশ্নের উত্তর আমার জানা নেই! 😅",
-    "চলো অন্য কিছু নিয়ে কথা বলি! 🌸"
-  ]);
+  conversations.set(threadID, history.slice(-MAX_HISTORY));
+
+  return answer;
 }
 
-function sendChat(api, threadID, text, senderID) {
-  api.sendMessage(text, threadID, (err, info) => {
-    if (err || !info || !info.messageID) return;
+async function replyAI(message, threadID, text) {
+  try {
+    const answer = await askGemini(threadID, text);
+    return message.reply(answer);
+  } catch (error) {
+    console.error("Chat error:", error.message);
 
-    if (global.GoatBot && global.GoatBot.onReply) {
-      global.GoatBot.onReply.set(info.messageID, {
-        commandName: "chat",
-        author: senderID,
-        messageID: info.messageID
-      });
+    if (error.message === "GEMINI_API_KEY_MISSING") {
+      return message.reply(
+        "⚠️ AI চালু করতে GitHub Secrets-এ GEMINI_API_KEY যোগ করো।"
+      );
     }
-  });
+
+    return message.reply(
+      "দুঃখিত! এখন AI-এর সঙ্গে সংযোগ হচ্ছে না। একটু পরে আবার চেষ্টা করো।"
+    );
+  }
 }
 
 module.exports = {
   config: {
     name: "chat",
-    aliases: ["talk", "botchat"],
+    aliases: ["talk", "ai"],
     version: "2.0.0",
     author: "Rayhan",
-    countDown: 2,
+    countDown: 3,
     role: 0,
-    shortDescription: "Chat with the bot",
-    longDescription: "Friendly conversation with predefined replies",
-    category: "fun",
-    guide: "{pn} হ্যালো"
+    shortDescription: "AI-এর সঙ্গে কথা বলো",
+    longDescription: "Gemini AI powered conversation",
+    category: "chat",
+    guide: "{pn} তোমার প্রশ্ন"
   },
 
-  onStart: async function ({ api, event, args }) {
-    const input = args.join(" ");
+  onStart: async function ({ message, args, event }) {
+    const text = (args || []).join(" ").trim();
 
-    const answer = getReply(input);
+    if (!text) {
+      return message.reply(
+        "হ্যালো! 😊 আমি AI Chat Bot।\n\nআমাকে প্রশ্ন করো:\n!chat তুমি কেমন আছো?"
+      );
+    }
 
-    sendChat(
-      api,
-      event.threadID,
-      answer,
-      event.senderID
-    );
+    const threadID = String(event.threadID || "default");
+    return replyAI(message, threadID, text);
   },
 
-  onReply: async function ({ api, event }) {
-    if (!event.body) return;
+  // সব মেসেজে উত্তর না দিয়ে শুধু "bot" দিয়ে শুরু হওয়া
+  // মেসেজে উত্তর দেবে। যেমন: bot তুমি কেমন আছো?
+  onChat: async function ({ event, message }) {
+    if (!event || !event.body) return;
 
-    const answer = getReply(event.body);
+    const body = event.body.trim();
+    const match = body.match(/^bot[\s,:]+(.+)$/i);
 
-    sendChat(
-      api,
-      event.threadID,
-      answer,
-      event.senderID
-    );
+    if (!match || !match[1].trim()) return;
+
+    const threadID = String(event.threadID || "default");
+    return replyAI(message, threadID, match[1].trim());
   }
 };
-  
