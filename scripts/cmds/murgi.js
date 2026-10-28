@@ -1,62 +1,65 @@
 
 module.exports.config = {
     name: "murgi",
-    version: "3.0",
+    version: "2.1.0",
     role: 0,
     author: "Rayhan",
-    description: "Funny Murgi Command",
+    description: "Mention করে ৫টি মজার রোস্ট পাঠাবে",
     category: "fun",
     guide: "{pn} @mention",
-    coolDown: 10
+    coolDown: 30
 };
 
 module.exports.onStart = async function ({ api, event }) {
-    const mentions = event.mentions || [];
+    const threadID = event.threadID;
+    const mentions = event.mentions || {};
+    const targetID = Object.keys(mentions)[0];
 
-    if (!mentions.length || !mentions[0]?.id) {
+    if (!targetID) {
         return api.sendMessage(
-            "🐔 কাকে মুরগি বানাবো? আগে কাউকে @mention করো!",
-            event.threadID,
-            event.messageID
+            "🐔 কাকে মুরগি বানাবে? 😂\n\nব্যবহার: !murgi @mention",
+            threadID
         );
     }
 
-    const target = mentions[0];
-    const name = target.name || "বন্ধু";
-    const uid = target.id;
+    const name = mentions[targetID];
 
     const messages = [
-        "🐔 কুট কুট! মুরগি সাহেব হাজির! 😂",
-        "🤣 তুই কি মুরগির বংশের রাজপুত্র?",
-        "🥚 ডিম কই? শুধু ডাকাডাকি করিস!",
-        "🐔 তোর হাঁটা দেখলে মুরগিও লজ্জা পায়!",
-        "😂 কুট কুট বাদ দে, একটু মানুষ হ!",
-        "🐣 তুই তো মুরগির CEO!",
-        "🤣 আজকে তোর মুরগি দিবস!",
-        "🐔 তোর জন্য একটা মুরগির খাঁচা লাগবে!",
-        "🥚 ডিমের হিসাব পরে দিস!",
-        "😂 মুরগির জগতে তুই সেলিব্রিটি!",
-        "🐓 কক কক! মুরগি সাহেবের আগমন!",
-        "🤣 তোরে দেখলে মুরগিরাও হাসে!",
-        "🐔 তুই কি মুরগির স্কুলে পড়িস?",
-        "😂 কুট কুট ইউনিভার্সিটির গোল্ড মেডেল!",
-        "🐣 মুরগি বাহিনীর প্রধান সেনাপতি!",
-        "🤣 তোর ডাক শুনে মোরগও পালায়!",
-        "🐔 তুই মুরগি নাকি মুরগির মামা?",
-        "😂 খাঁচার VIP সদস্য হাজির!",
-        "🐓 মুরগি সাহেব, সালাম নিন!",
-        "🤣 মুরগি রাজ্যের ভবিষ্যৎ সম্রাট!"
+        `🐔 ${name}, কক কক! আজকে তোমার মুরগি দিবস! 😂`,
+        `🤣 ${name}, তোমার বুদ্ধি কি ছুটিতে গেছে নাকি?`,
+        `😎 ${name}, গ্রুপে ঢুকলেই মুরগির ডাক শোনা যায়!`,
+        `😂 ${name}, তোমার সঙ্গে তর্ক করতে হলে মুরগির ভাষা শিখতে হবে!`,
+        `🐔 ${name}, আজকের মুরগি কিং তুমি! অভিনন্দন! 👑`
     ];
 
-    for (const msg of messages) {
-        await new Promise(resolve => setTimeout(resolve, 2000));
+    const sleep = ms =>
+        new Promise(resolve => setTimeout(resolve, ms));
 
-        await new Promise(resolve => {
-            api.sendMessage(
-                `${name}, ${msg}`,
-                event.threadID,
-                () => resolve()
+    for (let i = 0; i < messages.length; i++) {
+        try {
+            await new Promise((resolve, reject) => {
+                api.sendMessage(
+                    {
+                        body: messages[i],
+                        mentions: [{
+                            tag: name,
+                            id: targetID
+                        }]
+                    },
+                    threadID,
+                    err => err ? reject(err) : resolve()
+                );
+            });
+
+            if (i < messages.length - 1) {
+                await sleep(3000);
+            }
+        } catch (err) {
+            console.error("[MURGI ERROR]", err);
+            return api.sendMessage(
+                "❌ মেসেজ পাঠাতে সমস্যা হয়েছে। Bot-এর লগ চেক করো।",
+                threadID
             );
-        });
+        }
     }
 };
