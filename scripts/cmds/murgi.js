@@ -1,12 +1,12 @@
 
 module.exports.config = {
     name: "murgi",
-    version: "2.0.0",
-    role: 2,
+    version: "2.1.0",
+    role: 0,
     author: "Rayhan",
     description: "Mention করে ৫টি মজার রোস্ট পাঠাবে",
-    category: "admin",
-    guide: "@mention",
+    category: "fun",
+    guide: "{pn} @mention",
     coolDown: 30
 };
 
@@ -17,7 +17,7 @@ module.exports.onStart = async function ({ api, event }) {
 
     if (!targetID) {
         return api.sendMessage(
-            "🐔 কাকে মুরগি বানাবে? আগে একজনকে মেনশন দাও!",
+            "🐔 কাকে মুরগি বানাবে? 😂\n\nব্যবহার: !murgi @mention",
             threadID
         );
     }
@@ -28,7 +28,7 @@ module.exports.onStart = async function ({ api, event }) {
         `🐔 ${name}, কক কক! আজকে তোমার মুরগি দিবস! 😂`,
         `🤣 ${name}, তোমার বুদ্ধি কি ছুটিতে গেছে নাকি?`,
         `😎 ${name}, গ্রুপে ঢুকলেই মুরগির ডাক শোনা যায়!`,
-        `😂 ${name}, তোমার সঙ্গে তর্কে জিততে হলে আগে মুরগির ভাষা শিখতে হবে!`,
+        `😂 ${name}, তোমার সঙ্গে তর্ক করতে হলে মুরগির ভাষা শিখতে হবে!`,
         `🐔 ${name}, আজকের মুরগি কিং তুমি! অভিনন্দন! 👑`
     ];
 
@@ -57,10 +57,10 @@ module.exports.onStart = async function ({ api, event }) {
         } catch (err) {
             console.error("[MURGI ERROR]", err);
             return api.sendMessage(
-                "❌ মেসেজ পাঠানো যায়নি। Bot-এর লগ চেক করো।",
+                "❌ মেসেজ পাঠাতে সমস্যা হয়েছে। Bot-এর লগ চেক করো।",
                 threadID
             );
         }
     }
 };
-        
+                    
