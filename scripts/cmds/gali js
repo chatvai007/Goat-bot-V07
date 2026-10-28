@@ -1,77 +1,61 @@
-global.galiRunning = global.galiRunning || new Set();
 
 module.exports.config = {
-name: "gali",
-version: "2.0.0",
-hasPermssion: 0,
-credits: "Rayhan",
-description: "Gali Roast Command",
-commandCategory: "Fun",
-usages: "!gali / !gali stop",
-cooldowns: 3
+    name: "gali",
+    version: "1.0.0",
+    role: 0,
+    author: "Rayhan",
+    description: "বাংলা মজার গালি",
+    category: "fun",
+    guide: "{pn} @mention",
+    coolDown: 5
 };
 
-module.exports.run = async function ({ api, event, args }) {
-const threadID = event.threadID;
-const running = global.galiRunning;
+module.exports.onStart = async function ({ api, event }) {
+    const galiList = [
+        "আরে বোকাচন্দর! 😂",
+        "গাধার বাচ্চা! 🤣",
+        "মাথায় কি গোবর ভরা? 🐮",
+        "আহাম্মকের বাদশা! 👑",
+        "উল্টা বুদ্ধির কারখানা! 🤦",
+        "পাগলা ছাগল! 🐐",
+        "কাঁচা বুদ্ধির হাড্ডি! 😆",
+        "ফাজিলের ফ্যাক্টরি! 😂",
+        "গবেটের গুরু! 🤣",
+        "বুদ্ধি কি ছুটিতে গেছে? 😭",
+        "দুই টাকার নবাব! 😎",
+        "আক্কেলহীন মহারাজ! 👑",
+        "ঢংবাজের ডিলার! 🤣",
+        "আলুভর্তা মার্কা বুদ্ধি! 🥔",
+        "হাঁদারাম কোথাকার! 😂",
+        "গাধারও তোকে দেখে লজ্জা লাগে! 😭",
+        "তোর মাথায় কি বাতাসের কারখানা? 🌪️",
+        "তুই একটা আস্ত ফাজিল! 🤣",
+        "তোর বুদ্ধি হাঁটতে গিয়ে হারিয়ে গেছে! 😂",
+        "তুই মানুষ নাকি চলন্ত কমেডি শো? 🎭",
+        "তোর আক্কেল দেখে ক্যালকুলেটরও বন্ধ! 🧮",
+        "ওরে বুদ্ধিহীন সম্রাট! 👑",
+        "তুই তো ফাজলামির বিশ্বচ্যাম্পিয়ন! 🏆",
+        "তোর মাথায় গোবরের পাইকারি দোকান! 😂",
+        "তুই একটা আস্ত ঢংয়ের ডিব্বা! 🤣"
+    ];
 
-if (args[0] && args[0].toLowerCase() === "stop") {
-running.delete(threadID);
-return api.sendMessage(
-"🛑 Gali বন্ধ করা হয়েছে!",
-threadID,
-event.messageID
-);
-}
+    const mentions = event.mentions || [];
+    const target = mentions.length > 0
+        ? mentions[0].id
+        : event.senderID;
 
-if (running.has(threadID)) {
-return api.sendMessage(
-"⚠️ Gali ইতিমধ্যে চলছে! বন্ধ করতে !gali stop লেখো।",
-threadID
-);
-}
+    const name = mentions.length > 0
+        ? mentions[0].name
+        : "তুই";
 
-const gali = [
-"খানকির পোলা, এত ভাব কিসের রে? 😈",
-"মাদারচোদ, তোর নাটক আর কত দেখব! 💀",
-"শালা হারামজাদা, বেশি লাফাস কেন? 🤬",
-"ফাজিলের বাচ্চা, তোরে দেখলেই হাসি পায়! 😂",
-"বেকুবের হাড্ডি, মাথায় কি গোবর ভরা? 🤡",
-"শালা বাটপার, তোর ভাব দেখে আকাশও হাসে! 🤣",
-"হারামির হাড্ডি, তোর লজিক কই গেল? 🔥",
-"ওই ফাজিল, তুই কি কমেডি করতে জন্মাইছস? 😂",
-"শালা গাধা, নিজের বুদ্ধি নিজেই খুঁজে বের কর! 😈",
-"তুই এক নম্বরের পাগল, দুই নম্বরের ফাজিল! 💀",
-"বেশি পাকনামি করিস না, রোস্ট খেয়ে যাবি! 🔥",
-"শালা, তোর কথা শুনলে মাথা ঘুরে যায়! 🤣",
-"ওই বেকুব, তোর ব্রেইন কি এখনো ঘুমায়? 🥱",
-"ফাজিলের ফ্যাক্টরি, তোর ছুটি কবে হবে? 😂",
-"শালা, তোরে নিয়ে হাসির প্রতিযোগিতা করা যায়! 🤡",
-"হারামজাদা, তোর কাণ্ড দেখে কমেডিও লজ্জা পায়! 😈",
-"ওই গাধা, বেশি ভাব নিস না! 💀",
-"তুই পুরাই ঝামেলার প্যাকেট! 😂",
-"শালা, তোরে রোস্ট করতে আলাদা প্রতিভা লাগে না! 🔥",
-"ফাজিল কিং, তোর রাজত্ব শুধু গ্রুপের মধ্যেই! 🤣"
-];
+    const gali = galiList[
+        Math.floor(Math.random() * galiList.length)
+    ];
 
-running.add(threadID);
-
-try {
-for (let i = 0; i < 10; i++) {
-if (!running.has(threadID)) break;
-
-  await new Promise(resolve => setTimeout(resolve, 2000));
-
-  if (!running.has(threadID)) break;
-
-  const msg = gali[Math.floor(Math.random() * gali.length)];
-
-  await new Promise(resolve => {
-    api.sendMessage(msg, threadID, () => resolve());
-  });
-}
-
-} finally {
-running.delete(threadID);
-}
+    return api.sendMessage(
+        `${name}, ${gali}`,
+        event.threadID,
+        undefined,
+        target
+    );
 };
