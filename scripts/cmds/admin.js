@@ -24,7 +24,7 @@ module.exports = {
 ┃ 🛡️ ADMIN INFORMATION
 ╰━━━━━━━━━━━━━━━━━━╯
 
-👑 Admin Name : Adrita
+👑 Admin Name : keu nai 
 🤖 Bot Name   : Goat-Bot V2
 ⚙️ Prefix     : !
 💻 Platform   : Messenger
@@ -32,7 +32,7 @@ module.exports = {
 ━━━━━━━━━━━━━━━━━━━━
 
 🔗 Admin Facebook:
-https://www.facebook.com/share/19SbBaPHoJ/
+ ❌
 
 💚⃟ 𝑾𝒉𝒂𝒕𝒔𝑨𝒑𝒑 ꧁༺ 01638759227 ༻꧂ 💚
 
